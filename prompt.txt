@@ -1,0 +1,67 @@
+Atue como um Desenvolvedor Full Stack Sênior. Preciso que você desenvolva a solução completa para um desafio técnico de entrevista de emprego. O projeto é um sistema de gerenciamento de reservas para salas de reunião de um coworking.
+
+Daqui em diante, seguem as minhas instruções e restrições para realizar este desafio. Leia com atenção e gere o código e as instruções de acordo com os parâmetros abaixo.
+
+1. Stack Tecnológica Obrigatória
+Front-end: React + Vite + TypeScript.
+
+Back-end: Python (utilize FastAPI ou Flask) + SQL (utilize SQLite para rodar 100% localmente sem necessidade de infraestrutura externa ou Docker).
+
+2. O Desafio e Requisitos Funcionais
+A aplicação web deve gerenciar as reservas das salas de reunião e conter as seguintes funcionalidades:
+
+Listagem: Exibir as reservas agrupadas por dia e em ordem cronológica.
+
+Criação: Permitir criar uma nova reserva informando: Sala, Título, Horário de Início e Horário de Fim.
+
+Cancelamento: Permitir cancelar uma reserva existente.
+
+3. Regras de Negócio e Validações
+Os campos Sala, Título, Início e Fim são estritamente obrigatórios.
+
+O horário de fim precisa obrigatoriamente ser posterior ao horário de início.
+
+Regra de Sobreposição (Crucial): Duas reservas na mesma sala não podem se sobrepor no tempo. Essa validação deve ser feita e garantida no back-end.
+
+Salas: Não é necessário criar um CRUD para as salas. Elas podem ser fixas no código ou geradas por um seed inicial no banco de dados SQLite.
+
+4. A Decisão Arquitetural (Cancelamento)
+O coworking precisa poder cancelar uma reserva.
+
+Você deve implementar o cancelamento utilizando a abordagem de Soft Delete (marcar a reserva como cancelada adicionando uma coluna status ou canceled_at no banco) ou Hard Delete (remover o registro permanentemente do banco).
+
+Escolha uma das abordagens, implemente-a no código e, obrigatoriamente, escreva um texto justificando os prós e contras da sua escolha técnica. Este texto deverá ir para o README.md.
+
+5. Restrições de Ambiente
+Execução Local: A aplicação deve ser fácil de rodar localmente. Não utilize Docker, containers ou bancos de dados em nuvem. O banco deve ser um arquivo local .db gerado pelo SQLite.
+
+Simplicidade: O foco é a qualidade do código, tipagem correta no TypeScript, organização de pastas e o cumprimento das regras de negócio.
+
+6. Entregáveis (O que você deve gerar)
+Por favor, forneça o passo a passo completo da solução dividida nas seguintes partes:
+
+Estrutura de Pastas: Um resumo de como os arquivos do front e do back ficarão organizados.
+
+Back-end (Python + SQL):
+
+O script de inicialização do banco de dados SQLite (com o seed das salas).
+
+O código da API (rotas de listagem, criação com validação de sobreposição e cancelamento).
+
+Front-end (React + Vite + TS):
+
+A estrutura dos componentes.
+
+Tipagens/Interfaces em TypeScript.
+
+Integração com a API (fetch ou axios).
+.
+
+README.md:
+
+Instruções claras de como instalar as dependências e rodar o projeto localmente (ex: npm run dev para o front e uvicorn main:app --reload para o back).
+
+O parágrafo com a justificativa detalhada sobre a decisão do método de cancelamento escolhido (Soft vs Hard delete).
+
+por Favor Mantenha a Organização das pastas, como no Front separando por Componetes, Páginas, Services, Types, Hooks, etc... com nomemclatura clara nas paginas de codigo, faça comentarios no codigo explicando demais funções e no front end sapre versão mobile em uma pasta  diferente da versão exibida no PC, usando a logica vendo se a resolução da Tecnológica 
+no backend mantenha a mesma organização de pastas com nomemclaturas claras e autoexplicativa nada termos complexos em ingles para facilitar a visualização pelo recrutador

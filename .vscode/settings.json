@@ -1,0 +1,9 @@
+{
+  "python.defaultInterpreterPath": "C:\\Users\\joao\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "python.analysis.extraPaths": [
+    "./backend"
+  ],
+  "workbench.editorAssociations": {
+    "*.db": "sqlite-viewer.option"
+  }
+}
