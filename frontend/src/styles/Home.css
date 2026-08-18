@@ -99,9 +99,7 @@
 .info-section h2 {
   font-size: 3rem;
   margin-bottom: 2rem;
-  background: linear-gradient(90deg, #00d2ff, #8a2be2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: white; /* Removido o background linear-gradient em favor do branco padrão */
 }
 
 .info-section p {
@@ -124,14 +122,36 @@
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
-  padding: 2rem;
+  padding: 1.5rem;
   text-align: left;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
 }
 
 .sala-card:hover {
   transform: translateY(-5px);
   border-color: rgba(0, 210, 255, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 210, 255, 0.15);
+}
+
+.sala-image-container {
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.sala-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.sala-card:hover .sala-image-container img {
+  transform: scale(1.05);
 }
 
 .sala-card h3 {

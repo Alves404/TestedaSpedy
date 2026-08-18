@@ -1,4 +1,4 @@
-import React, { useState, useRef, MouseEvent } from 'react';
+import React, { useState, useRef, MouseEvent, useEffect } from 'react';
 import '../styles/Navbar.css';
 
 // Criação do componente GooeyNav pedido pelo usuário
@@ -6,9 +6,29 @@ export default function GooeyNav() {
   const [activeItem, setActiveItem] = useState<string>('inicio');
   const effectRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll('section[id]');
+      let current = 'inicio';
+      sections.forEach((section) => {
+        const htmlSection = section as HTMLElement;
+        const sectionTop = htmlSection.offsetTop;
+        if (window.scrollY >= sectionTop - window.innerHeight / 3) {
+          current = section.getAttribute('id') || 'inicio';
+        }
+      });
+      setActiveItem(current);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Trigger immediately to set correct initial state
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleClick = (e: MouseEvent<HTMLLIElement>, targetId: string) => {
     setActiveItem(targetId);
-    
+
     // Animação de Scroll
     if (targetId !== 'inicio') {
       const section = document.getElementById(targetId);
@@ -19,8 +39,16 @@ export default function GooeyNav() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Criar as partículas da animação CSS do usuário
-    if (effectRef.current) {
+    // Criar as partículas da animação CSS do usuário na posição do clique
+    if (effectRef.current && e.currentTarget) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const parentRect = effectRef.current.parentElement!.getBoundingClientRect();
+      
+      effectRef.current.style.left = `${rect.left - parentRect.left}px`;
+      effectRef.current.style.top = `${rect.top - parentRect.top}px`;
+      effectRef.current.style.width = `${rect.width}px`;
+      effectRef.current.style.height = `${rect.height}px`;
+
       effectRef.current.classList.add('active');
       const particleCount = 6;
       for (let i = 0; i < particleCount; i++) {
@@ -32,14 +60,14 @@ export default function GooeyNav() {
         particle.style.setProperty('--end-y', `${(Math.random() - 0.5) * 60}px`);
         particle.style.setProperty('--rotate', `${Math.random() * 360}deg`);
         particle.style.setProperty('--time', `${0.5 + Math.random() * 0.5}s`);
-        
+
         const point = document.createElement('span');
         point.className = 'point';
         point.style.setProperty('--scale', `${0.5 + Math.random() * 0.5}`);
-        
+
         particle.appendChild(point);
         effectRef.current.appendChild(particle);
-        
+
         // Remove the particle after animation
         setTimeout(() => {
           if (effectRef.current && effectRef.current.contains(particle)) {
@@ -47,7 +75,7 @@ export default function GooeyNav() {
           }
         }, 1000);
       }
-      
+
       // Remove the active class from effect after pill animation
       setTimeout(() => {
         if (effectRef.current) effectRef.current.classList.remove('active');
@@ -58,7 +86,7 @@ export default function GooeyNav() {
   return (
     <div className="gooey-nav-container">
       <div className="nav-logo">
-        <span>🏢</span> Coworking
+       <p>Coworking</p>
       </div>
       <nav>
         <ul>

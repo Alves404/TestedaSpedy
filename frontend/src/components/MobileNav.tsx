@@ -1,8 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/MobileNav.css';
 
 export default function MobileNav() {
   const [activeItem, setActiveItem] = useState<string>('inicio');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll('section[id]');
+      let current = 'inicio';
+      sections.forEach((section) => {
+        const htmlSection = section as HTMLElement;
+        const sectionTop = htmlSection.offsetTop;
+        if (window.scrollY >= sectionTop - window.innerHeight / 3) {
+          current = section.getAttribute('id') || 'inicio';
+        }
+      });
+      setActiveItem(current);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleClick = (targetId: string) => {
     setActiveItem(targetId);

@@ -5,6 +5,7 @@ import MobileNav from '../components/MobileNav';
 import { useResolucaoTela } from '../hooks/useResolucaoTela';
 import DesktopApp from '../components/desktop/DesktopApp';
 import MobileApp from '../components/mobile/MobileApp';
+import SplitText from '../components/SplitText';
 import '../styles/Home.css'; // O antigo css da Home foi para cá
 
 /**
@@ -28,9 +29,9 @@ export default function LandingPage() {
   return (
     <div className="home-layout dark-theme">
       {/* --- Fundo Animado Otimizado via WebGL (ogl) --- */}
-      <Topography 
-        lowColor="#06b6d4" 
-        midColor="#7c3aed" 
+      <Topography
+        lowColor="#06b6d4"
+        midColor="#7c3aed"
         highColor="#ffffff"
         speed={0.35}
         morphAmount={3}
@@ -51,7 +52,7 @@ export default function LandingPage() {
         mouseRadius={0.3}
         mouseStrength={0.4}
       />
-      
+
       <GooeyNav />
 
       {/* Seção Início (Hero) */}
@@ -75,27 +76,36 @@ export default function LandingPage() {
       <section id="sobre" className="section-container info-section">
         <h2>Sobre Nós</h2>
         <p>
-          O CoWorking Enterprise é um espaço desenhado para focar 100% no desempenho da sua equipe. 
-          Criamos um ecossistema livre de distrações, com café ilimitado, salas acusticamente isoladas 
+          O CoWorking Enterprise é um espaço desenhado para focar 100% no desempenho da sua equipe.
+          Criamos um ecossistema livre de distrações, com café ilimitado, salas acusticamente isoladas
           e internet em fibra ótica simétrica. Tudo o que você precisa para transformar ideias em realidade.
         </p>
       </section>
 
       {/* Seção Salas */}
       <section id="salas" className="section-container info-section">
-        <h2>Nossas Salas</h2>
+        <SplitText text="Nossas Salas" tag="h2" />
         <div className="salas-grid">
           <div className="sala-card">
+            <div className="sala-image-container">
+              <img src="/images/salas/sala1.jpg" alt="Sala Steve Jobs" />
+            </div>
             <h3>Sala Steve Jobs</h3>
-            <p>Perfeita para pitchs de vendas e reuniões impactantes (Até 10 pessoas).</p>
+            <p>Perfeita para pitchs de vendas e reuniões impactantes .</p>
           </div>
           <div className="sala-card">
+            <div className="sala-image-container">
+              <img src="/images/salas/sala2.jpg" alt="Sala Bill Gates" />
+            </div>
             <h3>Sala Bill Gates</h3>
-            <p>Ideal para alinhamentos estratégicos com diretores (Até 8 pessoas).</p>
+            <p>Ideal para alinhamentos estratégicos com diretores .</p>
           </div>
           <div className="sala-card">
-            <h3>Sala Ada Lovelace</h3>
-            <p>Feita para sessões técnicas e pareamento de desenvolvedores (Até 4 pessoas).</p>
+            <div className="sala-image-container">
+              <img src="/images/salas/sala3.jpg" alt="Sala Ada Lovelace" />
+            </div>
+            <h3>Sala do Mark Zuckerberg</h3>
+            <p>Feita para sessões técnicas e pareamento de desenvolvedores.</p>
           </div>
         </div>
       </section>
