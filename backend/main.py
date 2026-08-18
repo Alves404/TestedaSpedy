@@ -59,58 +59,24 @@ class SalaResposta(BaseModel):
     model_config = {"from_attributes": True}
 
 # --- Routes (Integrated) ---
+import crud
 router = APIRouter()
 
 @router.get("/salas", response_model=List[SalaResposta])
 def ler_salas(db: Session = Depends(get_db)):
-    return db.query(Sala).all()
+    return crud.get_salas(db)
 
 @router.get("/reservas", response_model=List[ReservaResposta])
 def ler_reservas(db: Session = Depends(get_db)):
-    return db.query(Reserva).filter(Reserva.cancelado_em == None).order_by(Reserva.inicio).all()
+    return crud.get_reservas_ativas(db)
 
 @router.post("/reservas", response_model=ReservaResposta)
 def criar_reserva(reserva: ReservaCriar, db: Session = Depends(get_db)):
-    # Verify room exists
-    sala = db.query(Sala).filter(Sala.id == reserva.sala_id).first()
-    if not sala:
-        raise HTTPException(status_code=404, detail="Sala não encontrada.")
-
-    # Check for overlapping reservations
-    reserva_existente = db.query(Reserva).filter(
-        Reserva.sala_id == reserva.sala_id,
-        Reserva.cancelado_em == None,
-        or_(
-            and_(Reserva.inicio <= reserva.inicio, Reserva.fim > reserva.inicio),
-            and_(Reserva.inicio < reserva.fim, Reserva.fim >= reserva.fim),
-            and_(Reserva.inicio >= reserva.inicio, Reserva.fim <= reserva.fim)
-        )
-    ).first()
-
-    if reserva_existente:
-        raise HTTPException(status_code=400, detail="Já existe uma reserva para esta sala neste horário.")
-
-    nova_reserva = Reserva(
-        sala_id=reserva.sala_id,
-        titulo=reserva.titulo,
-        inicio=reserva.inicio,
-        fim=reserva.fim
-    )
-    db.add(nova_reserva)
-    db.commit()
-    db.refresh(nova_reserva)
-    return nova_reserva
+    return crud.criar_reserva_db(db, reserva.sala_id, reserva.titulo, reserva.inicio, reserva.fim)
 
 @router.delete("/reservas/{reserva_id}")
 def cancelar_reserva(reserva_id: int, db: Session = Depends(get_db)):
-    reserva = db.query(Reserva).filter(Reserva.id == reserva_id, Reserva.cancelado_em == None).first()
-    if not reserva:
-        raise HTTPException(status_code=404, detail="Reserva não encontrada ou já cancelada.")
-    
-    # Soft Delete implementation
-    reserva.cancelado_em = datetime.now()
-    db.commit()
-    return {"mensagem": "Reserva cancelada com sucesso (Soft Delete)."}
+    return crud.cancelar_reserva_db(db, reserva_id)
 
 app.include_router(router, prefix="/api")
 
