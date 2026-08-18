@@ -1,73 +1,52 @@
-# Coworking Room Booking System
+# CoWorking Enterprise 🏢
 
-Este é um sistema de agendamento de salas para um Coworking, desenvolvido como desafio técnico.
+O CoWorking Enterprise é um sistema de agendamento de salas de reunião de alto desempenho construído com uma arquitetura dividida em Backend (Python/FastAPI) e Frontend (React/TypeScript).
 
-## 🚀 Tecnologias Utilizadas
-
-- **Back-end**: Python, FastAPI, SQLAlchemy (SQLite)
-- **Front-end**: React, Vite, TypeScript, Vanilla CSS
-
-## 📋 Pré-requisitos
-
-- Node.js e npm (para o front-end)
-- Python 3.8+ e pip (para o back-end)
+O projeto é capaz de verificar colisões de horário automaticamente e possui uma interface "Premium" com modo escuro que se adapta completamente à resolução do usuário (separação explícita de componentes para Desktop e Mobile).
 
 ---
 
-## ⚙️ Como rodar localmente
+## 🛠️ Arquitetura e Decisão Técnica (Cancelamento de Reservas)
 
-### 1. Back-end
+Ao desenvolver a funcionalidade de "Cancelamento de Reserva", optamos ativamente pela abordagem de **Soft Delete** em vez do clássico *Hard Delete* (onde a linha desaparece totalmente do banco com `DELETE FROM`).
 
-Abra o terminal, navegue até a pasta `backend` e siga os passos:
-
-```bash
-cd backend
-
-# Instale as dependências
-pip install -r requirements.txt
-
-# Inicie o servidor FastAPI localmente
-uvicorn main:app --reload
-```
-A API estará disponível em `http://localhost:8000`. O Swagger UI para testar as rotas pode ser acessado em `http://localhost:8000/docs`.
-
-**Nota sobre Banco de Dados:** Não é necessário instalar nenhum servidor SQL (como MySQL ou Postgres). A aplicação utiliza **SQLite**, e o arquivo `database.db` será gerado automaticamente na primeira execução, junto com as salas iniciais.
-
-### 2. Front-end
-
-Abra um novo terminal, navegue até a pasta `frontend` e siga os passos:
-
-```bash
-cd frontend
-
-# Instale as dependências
-npm install
-
-# Inicie o servidor de desenvolvimento
-npm run dev
-```
-Acesse a URL gerada (geralmente `http://localhost:5173`).
+**Justificativa Técnica (Soft Delete):**
+- **Prós:** 
+  1. Mantém uma auditoria temporal perfeita. Podemos saber *quantas* reservas foram canceladas no final de um mês para cruzar relatórios gerenciais e de marketing (ex: qual sala as pessoas mais desistem de usar).
+  2. Proteção extrema contra perda de dados. Nenhuma exclusão acidental apagará de fato o dado histórico, ele apenas some da visualização do usuário.
+  3. Integridade referencial. Podemos ter tabelas futuras de faturamento conectadas àquela reserva cancelada sem corromper as FKs (Foreign Keys).
+- **Contras:**
+  1. Aumenta ligeiramente a complexidade das consultas. Todos os `SELECT`s (ou consultas do SQLAlchemy) no backend devem incluir ativamente um filtro constante de `.filter(cancelado_em == None)`.
+  2. Uso microscópico contínuo de disco para armazenar linhas que "não deveriam estar lá", algo irrelevante para um SQLite em estágio de MVP, mas que precisa ser arquivado e gerido em bancos Enterprise maiores.
 
 ---
 
-## 🏗 Decisão Arquitetural: Cancelamento de Reservas (Soft Delete)
+## 🚀 Como Executar o Projeto Localmente
 
-Para o cancelamento das reservas, foi optado pelo método de **Soft Delete**. Em vez de remover fisicamente o registro do banco de dados (Hard Delete), adicionamos uma coluna `cancelado_em` na tabela de reservas.
+O aplicativo foi feito de maneira simplificada, sendo *apenas rodável de forma local* (nada de Docker, ou containers na Nuvem, tudo acontece na sua máquina em segundos).
 
-### Prós do Soft Delete:
-1. **Histórico e Auditoria:** Mantém o histórico completo. Se o sistema precisar futuramente auditar quais clientes mais cancelam ou emitir relatórios de desistência, os dados estão salvos.
-2. **Recuperação de Dados:** Permite "desfazer" exclusões acidentais, pois o dado não foi permanentemente apagado.
-3. **Integridade Referencial:** Evita a quebra de relacionamentos futuros com tabelas como "Faturas" ou "Log de Atividades".
+### 1. Iniciar a API (Backend)
+1. Abra um terminal e vá para a pasta `/backend`.
+2. (Opcional) Instale as dependências com `pip install -r requirements.txt`.
+3. Inicie o servidor FastAPI:
+   ```bash
+   uvicorn main:app --reload --port 8000
+   ```
+   > O Banco de dados (`coworking.db`) será criado sozinho, populado com 3 Salas Padrão automaticamente.
 
-### Contras do Soft Delete:
-1. **Espaço de Armazenamento:** A tabela continuará crescendo, o que poderia impactar custos de banco de dados a longo prazo se houver milhões de reservas.
-2. **Complexidade de Queries:** Exige atenção redobrada ao desenvolver: todas as consultas normais devem filtrar explicitamente (`WHERE cancelado_em IS NULL`), algo que o desenvolvedor não pode esquecer.
-3. **Restrições de Unicidade:** Em alguns bancos, regras "UNIQUE" precisam ser desenhadas com cuidado para não colidirem entre registros deletados e ativos (embora aqui não haja essa colisão, pois reservas podem se repetir).
-
-Dado que sistemas corporativos e coworkings lidam com cobranças e auditorias constantes, o Soft Delete é de longe a abordagem mais adequada e segura.
+### 2. Iniciar a Interface (Frontend)
+1. Abra um novo terminal e vá para a pasta `/frontend`.
+2. (Opcional) Instale os pacotes com `npm install`.
+3. Inicie o servidor em modo de desenvolvimento (Vite):
+   ```bash
+   npm run dev -- --port 5173 --strictPort
+   ```
+4. Navegue até http://localhost:5173 para acessar o sistema.
 
 ---
 
-## 📱 Separação Mobile vs Desktop
+## 📖 Documentação do Código (Docs)
 
-Atendendo aos requisitos e regras da avaliação, a estrutura de pastas do front-end foi dividida estritamente entre `src/components/desktop/` e `src/components/mobile/`. A definição de qual componente exibir é controlada em tempo de execução (`JavaScript`) via o hook `useResolucaoTela.ts`, permitindo notas otimizadas de SEO isolado e avaliação separada para a estrutura das diferentes telas.
+Caso precise se aprofundar em como o sistema funciona ou queira escalar a aplicação, preparamos duas documentações detalhadas que explicam linha a linha o que cada arquivo das nossas pastas faz:
+- Acesse 👉 **[Docs/Backend.md](Docs/Backend.md)**
+- Acesse 👉 **[Docs/Frontend.md](Docs/Frontend.md)**
