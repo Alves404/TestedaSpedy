@@ -84,13 +84,14 @@
 /* Base sections */
 .section-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1600px; /* Adaptado para Full HD / 8K */
+  margin: 0 auto;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 8rem 2rem 4rem 2rem; /* Padding top aumentado para a NavBar fixa não cobrir conteúdo */
   z-index: 5;
 }
 
@@ -151,8 +152,9 @@
 
 .app-wrapper {
   width: 100%;
-  height: 90vh; /* Deixa um respiro para a tela */
-  max-width: 1400px;
+  height: 85vh; /* Deixa um respiro para a tela */
+  max-height: 1400px; /* Adaptação para telas 8K (evita esticar infinitamente) */
+  max-width: 1800px;
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
