@@ -1,0 +1,29 @@
+/* HeroPortal: container fixo na viewport que aplica clip-path de expansão */
+
+.hero-portal {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+
+  /* Transparente: o Topography (z-index:0) aparece através do recorte */
+  background: transparent;
+
+  /* Estado inicial: inset será controlado por JS via clip-path inline */
+  clip-path: inset(10% 15% 10% 15% round 32px);
+
+  /* Animação suave acelerada pela GPU */
+  will-change: clip-path;
+
+  /* Transição suave ao ocultar o portal após expansão completa */
+  transition: opacity 0.4s ease;
+
+  pointer-events: auto;
+}
+
+/* Espaçador: empurra o restante do conteúdo para baixo do portal */
+.hero-portal-spacer {
+  /* Igual a 100vh (tela) + scroll_distance (1.2vh) + buffer */
+  height: calc(100vh + 120vh);
+  pointer-events: none;
+}

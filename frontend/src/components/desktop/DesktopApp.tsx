@@ -80,18 +80,26 @@ export default function DesktopApp() {
     setConfirm({ visible: true, reservaId: id, titulo: nome });
   };
 
-  // Confirma o cancelamento (Soft Delete)
+  // Confirma o cancelamento (Soft Delete) com Atualização Otimista
   const confirmarCancelamento = async () => {
     if (!confirm.reservaId) return;
+    
+    const idParaCancelar = confirm.reservaId;
+    
+    // Atualização Otimista: Remove da tela imediatamente
+    setReservas(prev => prev.filter(r => r.id !== idParaCancelar));
+    setConfirm({ visible: false, reservaId: null, titulo: '' });
+    
     try {
-      await cancelReserva(confirm.reservaId);
+      await cancelReserva(idParaCancelar);
       showToast('Reserva cancelada.', 'success');
+      // Traz os dados oficiais em background
       loadData();
     } catch (e: unknown) {
+      // Em caso de erro, avisa e recarrega para restaurar o estado original
       const msg = e instanceof Error ? e.message : 'Erro ao cancelar';
       showToast(`✕ ${msg}`, 'error');
-    } finally {
-      setConfirm({ visible: false, reservaId: null, titulo: '' });
+      loadData();
     }
   };
 
@@ -100,16 +108,15 @@ export default function DesktopApp() {
     new Date(data).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 
   // Retorna o nome da sala pelo ID
+  // Retorna o nome da sala pelo ID
   const nomeSala = (id: number) => salas.find(s => s.id === id)?.nome ?? 'Sala desconhecida';
 
   return (
     <div className="desktop-layout">
-
       {/* ---- SIDEBAR / FORMULÁRIO ---- */}
       <aside className="sidebar">
         <div className="sidebar-header">
           <div className="sidebar-logo">
-            <div className="logo-icon">🏢</div>
             <h1>CoWork</h1>
           </div>
           <p className="sidebar-subtitle">Sistema de Reservas</p>

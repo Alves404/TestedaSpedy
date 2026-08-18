@@ -77,18 +77,24 @@ export default function MobileApp() {
     setConfirmTitulo(nome);
   };
 
-  // Executa o cancelamento (Soft Delete)
+  // Executa o cancelamento (Soft Delete) com Atualização Otimista
   const confirmarCancelamento = async () => {
     if (!confirmId) return;
+
+    const idParaCancelar = confirmId;
+    
+    // Atualização Otimista
+    setReservas(prev => prev.filter(r => r.id !== idParaCancelar));
+    setConfirmId(null);
+
     try {
-      await cancelReserva(confirmId);
+      await cancelReserva(idParaCancelar);
       showToast('Reserva cancelada.', 'success');
       loadData();
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : 'Erro ao cancelar';
       showToast(`✕ ${msg}`, 'error');
-    } finally {
-      setConfirmId(null);
+      loadData();
     }
   };
 
@@ -100,11 +106,9 @@ export default function MobileApp() {
 
   return (
     <div className="mobile-layout">
-
-      {/* ---- HEADER ---- */}
+      {/* --- HEADER FIXO --- */}
       <header className="mobile-header">
         <div className="mobile-logo">
-          <div className="logo-icon">🏢</div>
           <h1>CoWork</h1>
         </div>
         <button className="btn-fab" onClick={() => setIsSheetOpen(true)} title="Nova reserva">+</button>

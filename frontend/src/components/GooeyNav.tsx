@@ -8,21 +8,32 @@ export default function GooeyNav() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = document.querySelectorAll('section[id]');
-      let current = 'inicio';
-      sections.forEach((section) => {
-        const htmlSection = section as HTMLElement;
-        const sectionTop = htmlSection.offsetTop;
-        if (window.scrollY >= sectionTop - window.innerHeight / 3) {
-          current = section.getAttribute('id') || 'inicio';
+      const scrollPos = window.scrollY;
+
+      // O HeroPortal agora ocupa 0.8vh de scroll antes das sections reais aparecerem
+      const PORTAL_SCROLL = window.innerHeight * 0.8;
+
+      if (scrollPos < PORTAL_SCROLL) {
+        setActiveItem('inicio');
+        return;
+      }
+
+      const sections = ['sobre', 'salas', 'agendar'];
+      let current = 'sobre';
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.scrollY;
+          if (scrollPos >= top - window.innerHeight / 3) {
+            current = id;
+          }
         }
       });
       setActiveItem(current);
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Trigger immediately to set correct initial state
-
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

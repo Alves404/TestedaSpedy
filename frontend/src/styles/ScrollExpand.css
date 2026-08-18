@@ -1,0 +1,97 @@
+.scroll-expand {
+  position: relative;
+  width: 100%;
+}
+
+.scroll-expand--scroller {
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.scroll-expand__track {
+  width: 100%;
+  position: relative;
+}
+
+.scroll-expand__stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scroll-expand__frame {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  will-change: clip-path;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4); /* base dark */
+}
+
+.scroll-expand__media {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.scroll-expand__scrim {
+  position: absolute;
+  inset: 0;
+  background: black;
+  opacity: 0;
+  will-change: opacity;
+  z-index: 5;
+}
+
+.scroll-expand__overlay {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity;
+  gap: 1rem;
+}
+
+.scroll-expand__title {
+  position: absolute;
+  font-size: var(--se-title-size, 4rem);
+  font-weight: 800;
+  color: white;
+  text-align: center;
+  z-index: 20;
+  will-change: transform, opacity;
+  pointer-events: none;
+  line-height: 1.1;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.scroll-expand__hint {
+  position: absolute;
+  bottom: 3rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  z-index: 20;
+  will-change: transform, opacity;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  animation: floatHint 2s infinite ease-in-out;
+}
+
+@keyframes floatHint {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+}

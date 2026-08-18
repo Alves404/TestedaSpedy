@@ -35,6 +35,7 @@
   width: 90%;
   max-width: 1000px;
   height: 60px;
+  z-index: 100; /* Garante que a NAV fique por cima de todas as sections (Sobre, Salas, etc) */
   background: rgba(10, 10, 15, 0.6);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -45,6 +46,24 @@
   padding: 0 24px;
   z-index: 100;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: navExpandIn 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  transform-origin: center top;
+}
+
+@keyframes navExpandIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.8) translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1) translateY(0);
+  }
+}
+
+/* Estado final da animação: garantir que fique centrado */
+.gooey-nav-container {
+  transform: translateX(-50%);
 }
 
 .gooey-nav-container .nav-logo {
