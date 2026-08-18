@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Renderer, Program, Mesh, Triangle } from 'ogl';
-import './Topography.css';
+import '../styles/Topography.css';
 
 export type ColorMode = 'elevation' | 'uniform' | 'alternating';
 

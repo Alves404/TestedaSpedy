@@ -7,9 +7,6 @@
   align-items: center;
   color: white;
   font-family: 'Inter', sans-serif;
-  overflow-x: hidden;
-  overflow-y: auto;
-  scroll-behavior: smooth;
 }
 
 /* NavBar Flutuante */
