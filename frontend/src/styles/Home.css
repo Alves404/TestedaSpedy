@@ -281,6 +281,21 @@
   position: relative;
 }
 
+@media (max-width: 768px) {
+  .app-wrapper {
+    width: 100%;
+    height: 100vh;
+    max-height: none;
+    border-radius: 0;
+    border: none;
+    margin: 0;
+  }
+  
+  .app-section {
+    padding: 0;
+  }
+}
+
 .hero-pill {
   display: flex;
   align-items: center;

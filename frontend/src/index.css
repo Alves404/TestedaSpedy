@@ -291,18 +291,18 @@ body {
 /* --- Cards de Reserva --- */
 .reservations-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); /* Mais largo */
+  gap: 16px;
 }
 
 .reservation-card {
   background: var(--bg-card);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-lg);
-  padding: 20px;
+  padding: 16px 24px; /* Menos altura, mais largura interna */
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px; /* Menos espaçamento vertical interno */
   transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
   position: relative;
   overflow: hidden;
@@ -473,31 +473,27 @@ body {
   gap: 10px;
 }
 
-.mobile-logo .logo-icon {
-  width: 32px;
-  height: 32px;
-  font-size: 14px;
-}
-
-.mobile-logo h1 {
-  font-size: 1rem;
-  font-weight: 700;
+.mobile-logo-icon {
   color: var(--text-primary);
 }
 
+.mobile-logo h1 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
 .btn-fab {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, var(--accent-primary), #8b5cf6);
-  color: white;
-  border: none;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  font-size: 20px;
-  cursor: pointer;
+  background: var(--accent-primary);
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);
+  cursor: pointer;
   transition: transform 0.2s;
   line-height: 1;
 }
@@ -516,28 +512,45 @@ body {
 }
 
 .mobile-sheet {
-  width: 100%;
-  background: var(--bg-secondary);
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  padding: 28px 24px 40px;
-  border-top: 1px solid var(--border-color);
-  max-height: 90vh;
+  background: #111;
+  border-top-left-radius: var(--radius-xl);
+  border-top-right-radius: var(--radius-xl);
+  padding: 24px;
+  max-height: 85vh;
   overflow-y: auto;
+  position: relative;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
 }
 
 .sheet-handle {
   width: 40px;
   height: 4px;
-  background: var(--text-muted);
-  border-radius: 2px;
-  margin: 0 auto 24px;
+  background: var(--border-color);
+  border-radius: 4px;
+  margin: 0 auto 20px;
+}
+
+.sheet-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sheet-title {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: var(--text-primary);
   margin-bottom: 20px;
+  color: var(--text-primary);
 }
 
 .mobile-content {
@@ -602,7 +615,7 @@ body {
   color: var(--text-secondary);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px; /* Espaço para os ícones Lucide */
 }
 
 .mobile-card-footer {

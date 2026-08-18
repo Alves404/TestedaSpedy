@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Home, Info, LayoutGrid, CalendarRange } from 'lucide-react';
 import '../styles/MobileNav.css';
 
 export default function MobileNav() {
@@ -44,28 +45,28 @@ export default function MobileNav() {
         className={`mobile-nav-item ${activeItem === 'inicio' ? 'active' : ''}`} 
         onClick={() => handleClick('inicio')}
       >
-        <span>🏠</span>
+        <Home size={22} className="nav-icon" />
         Início
       </div>
       <div 
         className={`mobile-nav-item ${activeItem === 'sobre' ? 'active' : ''}`} 
         onClick={() => handleClick('sobre')}
       >
-        <span>🏢</span>
+        <Info size={22} className="nav-icon" />
         Sobre
       </div>
       <div 
         className={`mobile-nav-item ${activeItem === 'salas' ? 'active' : ''}`} 
         onClick={() => handleClick('salas')}
       >
-        <span>🚪</span>
+        <LayoutGrid size={22} className="nav-icon" />
         Salas
       </div>
       <div 
         className={`mobile-nav-item ${activeItem === 'agendar' ? 'active' : ''}`} 
         onClick={() => handleClick('agendar')}
       >
-        <span>📅</span>
+        <CalendarRange size={22} className="nav-icon" />
         Agendar
       </div>
     </div>

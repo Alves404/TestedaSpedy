@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import type { Sala, Reserva } from '../../types';
 import { fetchSalas, fetchReservas, createReserva, cancelReserva } from '../../services/api';
+import { Building2, Plus, CalendarDays, DoorClosed, Clock, X, Trash2 } from 'lucide-react';
 
 /* --- Tipagem interna para Toast --- */
 interface Toast {
@@ -109,9 +110,12 @@ export default function MobileApp() {
       {/* --- HEADER FIXO --- */}
       <header className="mobile-header">
         <div className="mobile-logo">
+          <Building2 size={24} className="mobile-logo-icon" />
           <h1>CoWork</h1>
         </div>
-        <button className="btn-fab" onClick={() => setIsSheetOpen(true)} title="Nova reserva">+</button>
+        <button className="btn-fab" onClick={() => setIsSheetOpen(true)} title="Nova reserva">
+          <Plus size={24} color="#fff" />
+        </button>
       </header>
 
       {/* ---- LISTAGEM ---- */}
@@ -123,9 +127,9 @@ export default function MobileApp() {
           </div>
         ) : reservas.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-state-icon">📅</div>
+            <CalendarDays size={48} color="rgba(255,255,255,0.4)" className="empty-state-icon" />
             <h3>Nenhuma reserva ativa</h3>
-            <p>Toque em + para agendar uma sala.</p>
+            <p>Toque no botão + para agendar uma sala.</p>
           </div>
         ) : (
           <div className="reservations-list">
@@ -133,13 +137,13 @@ export default function MobileApp() {
               <div key={r.id} className="mobile-card">
                 <p className="mobile-card-title">{r.titulo}</p>
                 <div className="mobile-card-info">
-                  <span>🚪 {nomeSala(r.sala_id)}</span>
-                  <span>🕐 Início: {formatarData(r.inicio)}</span>
-                  <span>🕓 Fim: {formatarData(r.fim)}</span>
+                  <span><DoorClosed size={16} /> {nomeSala(r.sala_id)}</span>
+                  <span><Clock size={16} /> Início: {formatarData(r.inicio)}</span>
+                  <span><Clock size={16} /> Fim: {formatarData(r.fim)}</span>
                 </div>
                 <div className="mobile-card-footer">
                   <button className="btn-danger" onClick={() => pedirCancelamento(r.id, r.titulo)}>
-                    Cancelar
+                    <Trash2 size={16} style={{marginRight: 6}} /> Cancelar
                   </button>
                 </div>
               </div>
@@ -153,6 +157,9 @@ export default function MobileApp() {
         <div className="mobile-sheet-overlay" onClick={() => setIsSheetOpen(false)}>
           <div className="mobile-sheet" onClick={e => e.stopPropagation()}>
             <div className="sheet-handle" />
+            <button className="sheet-close-btn" onClick={() => setIsSheetOpen(false)}>
+              <X size={20} />
+            </button>
             <p className="sheet-title">Nova Reserva</p>
             <form onSubmit={handleSubmit} className="reservation-form">
               <div className="form-group">
