@@ -11,12 +11,12 @@ def get_reservas_ativas(db: Session):
     return db.query(Reserva).filter(Reserva.cancelado_em == None).order_by(Reserva.inicio).all()
 
 def criar_reserva_db(db: Session, sala_id: int, titulo: str, inicio: datetime, fim: datetime):
-    # Verify room exists
+    # Verifica se a sala de fato existe no banco
     sala = db.query(Sala).filter(Sala.id == sala_id).first()
     if not sala:
         raise HTTPException(status_code=404, detail="Sala não encontrada.")
 
-    # Check for overlapping reservations
+    # Checagem matemática para evitar colisão/sobreposição de horários de reserva
     reserva_existente = db.query(Reserva).filter(
         Reserva.sala_id == sala_id,
         Reserva.cancelado_em == None,
@@ -46,7 +46,7 @@ def cancelar_reserva_db(db: Session, reserva_id: int):
     if not reserva:
         raise HTTPException(status_code=404, detail="Reserva não encontrada ou já cancelada.")
     
-    # Soft Delete implementation
+    # Implementação do Soft Delete: Registra a data do cancelamento sem excluir a linha
     reserva.cancelado_em = datetime.now()
     db.commit()
     return {"mensagem": "Reserva cancelada com sucesso (Soft Delete)."}

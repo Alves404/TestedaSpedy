@@ -6,12 +6,12 @@ from pydantic import BaseModel, field_validator
 from datetime import datetime
 from typing import Optional, List
 
-# Imports from our single database file
+# Importações do nosso arquivo central de banco de dados
 from database import engine, Base, SessionLocal, Sala, Reserva
 
 app = FastAPI(title="Coworking Booking API")
 
-# CORS setup
+# Configuração do CORS (Permite que o Frontend se conecte)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -20,7 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- Dependency ---
+# --- Dependências (Injeção do Banco) ---
 def get_db():
     db = SessionLocal()
     try:
@@ -28,7 +28,7 @@ def get_db():
     finally:
         db.close()
 
-# --- Schemas ---
+# --- Esquemas Pydantic (Validação de Dados) ---
 class ReservaCriar(BaseModel):
     sala_id: int
     titulo: str
@@ -58,7 +58,7 @@ class SalaResposta(BaseModel):
 
     model_config = {"from_attributes": True}
 
-# --- Routes (Integrated) ---
+# --- Rotas da API ---
 import crud
 router = APIRouter()
 
@@ -80,7 +80,7 @@ def cancelar_reserva(reserva_id: int, db: Session = Depends(get_db)):
 
 app.include_router(router, prefix="/api")
 
-# --- Startup Event (Database Seeding) ---
+# --- Evento de Inicialização (Seeding do Banco de Dados) ---
 @app.on_event("startup")
 def startup_event():
     Base.metadata.create_all(bind=engine)

@@ -1,4 +1,5 @@
-import { useEffect, useState, FormEvent } from 'react';
+import React, { useState, useEffect } from 'react';
+import type { FormEvent } from 'react';
 import type { Sala, Reserva } from '../../types';
 import { fetchSalas, fetchReservas, createReserva, cancelReserva } from '../../services/api';
 
