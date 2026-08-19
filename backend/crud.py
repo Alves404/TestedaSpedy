@@ -21,11 +21,11 @@ def criar_reserva_db(db: Session, sala_id: int, titulo: str, inicio: datetime, f
         Reserva.sala_id == sala_id,
         Reserva.cancelado_em == None,
         or_(
-            and_(Reserva.inicio <= inicio, Reserva.fim > inicio),  
-            and_(Reserva.inicio < fim, Reserva.fim >= fim),  
-            and_(Reserva.inicio >= inicio, Reserva.fim <= fim) 
+            and_(Reserva.inicio <= inicio, Reserva.fim > inicio),  # Verifica se a reserva começa antes do periodo e termina dentro dele
+            and_(Reserva.inicio < fim, Reserva.fim >= fim),  # Verifica se a reserva começa dentro do periodo e termina depois dele
+            and_(Reserva.inicio >= inicio, Reserva.fim <= fim) # Verifica se a reserva começa e termina dentro do periodo
         )
-    ).first()
+    ).first() # Retorna a primeira reserva que satisfizer as condições acima
 
     if reserva_existente:
         raise HTTPException(status_code=400, detail="Já existe uma reserva para esta sala neste horário.")
