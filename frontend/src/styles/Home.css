@@ -370,3 +370,59 @@
   background: rgba(50, 50, 60, 0.8);
   border-color: rgba(255, 255, 255, 0.2);
 }
+
+/* --- Mobile Fixes --- */
+.mobile-hero-section {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-hero-content {
+  position: relative !important;
+  inset: auto !important;
+  z-index: 20;
+}
+
+@media (max-width: 768px) {
+  .section-container {
+    padding: 5rem 1rem 3rem 1rem !important;
+  }
+  
+  .sobre-card-wrapper {
+    padding: 0.5rem !important;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+    margin-bottom: 24px;
+  }
+  
+  .info-section h2 {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  #salas h2 {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+  }
+
+  .info-section p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-primary-glow, .btn-secondary-dark {
+    width: 100%;
+  }
+}

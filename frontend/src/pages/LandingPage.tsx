@@ -38,61 +38,102 @@ export default function LandingPage() {
       <GooeyNav />
 
       {/* ============================================================
-          CAMADA 1: HeroPortal — caixa que expande ao rolar e revela o site.
-          Contém fundo WebGL, texto e botões do Hero.
-          O fundo 3D (Topography) continua visível atrás de tudo após a expansão.
+          CAMADA 1: Hero / HeroPortal
+          Se for mobile, desativa o portal (evitando a "caixa") para não quebrar o layout.
           ============================================================ */}
-      <HeroPortal>
-        {/* Fundo 3D dentro do portal para ser revelado pela caixa */}
-        <Topography
-          lowColor="#06b6d4"
-          midColor="#7c3aed"
-          highColor="#ffffff"
-          speed={0.35}
-          morphAmount={3}
-          morphSpeed={0.05}
-          bands={2}
-          thickness={0.01}
-          scale={2}
-          pixelSize={1}
-          glow={0.5}
-          colorMode="elevation"
-          contrast={3}
-          brightness={1}
-          fillBands={false}
-          grain={false}
-          grainIntensity={0.05}
-          opacity={1}
-          mouseInteraction={false}
-          mouseRadius={0.3}
-          mouseStrength={0.4}
-        />
+      {!isMobile ? (
+        <>
+          <HeroPortal>
+            <Topography
+              lowColor="#06b6d4"
+              midColor="#7c3aed"
+              highColor="#ffffff"
+              speed={0.35}
+              morphAmount={3}
+              morphSpeed={0.05}
+              bands={2}
+              thickness={0.01}
+              scale={2}
+              pixelSize={1}
+              glow={0.5}
+              colorMode="elevation"
+              contrast={3}
+              brightness={1}
+              fillBands={false}
+              grain={false}
+              grainIntensity={0.05}
+              opacity={1}
+              mouseInteraction={false}
+              mouseRadius={0.3}
+              mouseStrength={0.4}
+            />
 
-        <div className="hero-content" id="inicio">
-          <h1 className="hero-title">
-            O Futuro do seu<br />Escritório
-          </h1>
-          <div className="hero-buttons">
-            <button className="btn-primary-glow" onClick={handleScrollToAgendar}>
-              Agendar uma Sala
-            </button>
-            <button className="btn-secondary-dark" onClick={() => {
-              document.getElementById('sobre')?.scrollIntoView({ behavior: 'smooth' });
-            }}>
-              Saber mais
-            </button>
-          </div>
-          <div className="hero-scroll-hint">
-            <div className="scroll-mouse">
-              <div className="scroll-wheel"></div>
+            <div className="hero-content" id="inicio">
+              <h1 className="hero-title">
+                O Futuro do seu<br />Escritório
+              </h1>
+              <div className="hero-buttons">
+                <button className="btn-primary-glow" onClick={handleScrollToAgendar}>
+                  Agendar uma Sala
+                </button>
+                <button className="btn-secondary-dark" onClick={() => {
+                  document.getElementById('sobre')?.scrollIntoView({ behavior: 'smooth' });
+                }}>
+                  Saber mais
+                </button>
+              </div>
+              <div className="hero-scroll-hint">
+                <div className="scroll-mouse">
+                  <div className="scroll-wheel"></div>
+                </div>
+                <span>Role para descobrir</span>
+              </div>
             </div>
-            <span>Role para descobrir</span>
+          </HeroPortal>
+          <div className="hero-portal-spacer" aria-hidden="true" />
+        </>
+      ) : (
+        <div className="mobile-hero-section">
+          <Topography
+            lowColor="#06b6d4"
+            midColor="#7c3aed"
+            highColor="#ffffff"
+            speed={0.35}
+            morphAmount={3}
+            morphSpeed={0.05}
+            bands={2}
+            thickness={0.01}
+            scale={2}
+            pixelSize={1}
+            glow={0.5}
+            colorMode="elevation"
+            contrast={3}
+            brightness={1}
+            fillBands={false}
+            grain={false}
+            grainIntensity={0.05}
+            opacity={1}
+            mouseInteraction={false}
+            mouseRadius={0.3}
+            mouseStrength={0.4}
+          />
+          <div className="hero-content mobile-hero-content" id="inicio">
+            <h1 className="hero-title">
+              O Futuro do seu<br />Escritório
+            </h1>
+            <div className="hero-buttons">
+              <button className="btn-primary-glow" onClick={handleScrollToAgendar}>
+                Agendar uma Sala
+              </button>
+              <button className="btn-secondary-dark" onClick={() => {
+                document.getElementById('sobre')?.scrollIntoView({ behavior: 'smooth' });
+              }}>
+                Saber mais
+              </button>
+            </div>
           </div>
         </div>
-      </HeroPortal>
-
-      {/* Espaçador: cria o espaço de scroll para a animação do portal */}
-      <div className="hero-portal-spacer" aria-hidden="true" />
+      )}
 
       {/* ============================================================
           CAMADA 4: Sections — aparecem conforme o portal some

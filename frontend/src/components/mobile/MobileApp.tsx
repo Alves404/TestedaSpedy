@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import type { FormEvent } from 'react';
 import type { Sala, Reserva } from '../../types';
 import { fetchSalas, fetchReservas, createReserva, cancelReserva } from '../../services/api';
@@ -114,7 +115,7 @@ export default function MobileApp() {
           <h1>CoWork</h1>
         </div>
         <button className="btn-fab" onClick={() => setIsSheetOpen(true)} title="Nova reserva">
-          <Plus size={24} color="#fff" />
+          <Plus size={24} color="#000" />
         </button>
       </header>
 
@@ -153,7 +154,7 @@ export default function MobileApp() {
       </div>
 
       {/* ---- BOTTOM SHEET (FORMULÁRIO) ---- */}
-      {isSheetOpen && (
+      {isSheetOpen && createPortal(
         <div className="mobile-sheet-overlay" onClick={() => setIsSheetOpen(false)}>
           <div className="mobile-sheet" onClick={e => e.stopPropagation()}>
             <div className="sheet-handle" />
@@ -186,7 +187,8 @@ export default function MobileApp() {
               </button>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ---- MODAL DE CONFIRMAÇÃO ---- */}
