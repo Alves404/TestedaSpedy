@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import type { FormEvent } from 'react';
 import type { Sala, Reserva } from '../../types';
@@ -118,7 +118,7 @@ export default function MobileApp() {
           <Plus size={24} color="#000" />
         </button>
       </header>
-
+    
       {/* ---- LISTAGEM ---- */}
       <div className="mobile-content">
         <h2>Reservas Ativas</h2>
