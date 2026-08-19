@@ -61,8 +61,8 @@ export default function DesktopApp() {
       await createReserva({
         sala_id: Number(salaId),
         titulo,
-        inicio: new Date(inicio).toISOString(),
-        fim: new Date(fim).toISOString(),
+        inicio: inicio.length === 16 ? inicio + ':00' : inicio,
+        fim: fim.length === 16 ? fim + ':00' : fim,
       });
       showToast('✓ Reserva criada com sucesso!', 'success');
       setSalaId(''); setTitulo(''); setInicio(''); setFim('');
