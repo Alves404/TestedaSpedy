@@ -21,7 +21,7 @@ def criar_reserva_db(db: Session, sala_id: int, titulo: str, inicio: datetime, f
         Reserva.sala_id == sala_id,
         Reserva.cancelado_em == None,
         or_(
-            and_(Reserva.inicio <= inicio, Reserva.fim > inicio),
+            and_(Reserva.inicio <= inicio, Reserva.fim > inicio),  
             and_(Reserva.inicio < fim, Reserva.fim >= fim),
             and_(Reserva.inicio >= inicio, Reserva.fim <= fim)
         )

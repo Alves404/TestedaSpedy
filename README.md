@@ -1,52 +1,81 @@
-# CoWorking Enterprise 🏢
+# Desafio Técnico - Spedy: Gestão de Reservas de Coworking
 
-O CoWorking Enterprise é um sistema de agendamento de salas de reunião de alto desempenho construído com uma arquitetura dividida em Backend (Python/FastAPI) e Frontend (React/TypeScript).
+Este repositório contém a solução desenvolvida para o desafio técnico da vaga na Spedy, que consiste em um sistema web para gerenciar reservas de salas de reunião em um coworking.
 
-O projeto é capaz de verificar colisões de horário automaticamente e possui uma interface "Premium" com modo escuro que se adapta completamente à resolução do usuário (separação explícita de componentes para Desktop e Mobile).
-
----
-
-## 🛠️ Arquitetura e Decisão Técnica (Cancelamento de Reservas)
-
-Ao desenvolver a funcionalidade de "Cancelamento de Reserva", optamos ativamente pela abordagem de **Soft Delete** em vez do clássico *Hard Delete* (onde a linha desaparece totalmente do banco com `DELETE FROM`).
-
-**Justificativa Técnica (Soft Delete):**
-- **Prós:** 
-  1. Mantém uma auditoria temporal perfeita. Podemos saber *quantas* reservas foram canceladas no final de um mês para cruzar relatórios gerenciais e de marketing (ex: qual sala as pessoas mais desistem de usar).
-  2. Proteção extrema contra perda de dados. Nenhuma exclusão acidental apagará de fato o dado histórico, ele apenas some da visualização do usuário.
-  3. Integridade referencial. Podemos ter tabelas futuras de faturamento conectadas àquela reserva cancelada sem corromper as FKs (Foreign Keys).
-- **Contras:**
-  1. Aumenta ligeiramente a complexidade das consultas. Todos os `SELECT`s (ou consultas do SQLAlchemy) no backend devem incluir ativamente um filtro constante de `.filter(cancelado_em == None)`.
-  2. Uso microscópico contínuo de disco para armazenar linhas que "não deveriam estar lá", algo irrelevante para um SQLite em estágio de MVP, mas que precisa ser arquivado e gerido em bancos Enterprise maiores.
+A aplicação foi construída visando alto desempenho, excelência em design e boa manutenibilidade, com arquitetura dividida em Backend (Python/FastAPI) e Frontend (React/TypeScript).
 
 ---
 
-## 🚀 Como Executar o Projeto Localmente
+## Sobre o Desafio e as Funcionalidades
 
-O aplicativo foi feito de maneira simplificada, sendo *apenas rodável de forma local* (nada de Docker, ou containers na Nuvem, tudo acontece na sua máquina em segundos).
+A aplicação atende rigorosamente aos requisitos exigidos pelo escopo do desafio:
+- **Listagem de Reservas:** Agrupadas por dia e ordenadas de forma cronológica (diretamente da API e renderizadas no frontend).
+- **Criação de Reservas:** Formulário com validação de preenchimento para as informações de sala, título, horário de início e término.
+- **Regras de Negócio e Validações:**
+  - Todos os campos são de preenchimento obrigatório.
+  - O horário de término não pode ser igual ou anterior ao horário de início.
+  - **Validação de Sobreposição (Backend):** Duas reservas na mesma sala nunca podem se sobrepor no tempo. Se os horários coincidirem parcialmente ou abrangerem totalmente uma reserva existente, a API bloqueia a criação do registro (conforme demonstrado no vídeo de apresentação).
+- **Salas Base (Seed):** O banco de dados SQLite executa a criação de salas fixas em sua inicialização, sem a necessidade de um módulo isolado de cadastro de salas.
 
-### 1. Iniciar a API (Backend)
-1. Abra um terminal e vá para a pasta `/backend`.
-2. (Opcional) Instale as dependências com `pip install -r requirements.txt`.
-3. Inicie o servidor FastAPI:
+---
+
+## Decisão Técnica: Cancelamento de Reservas
+
+Foi solicitado no escopo do desafio a tomada de decisão sobre o comportamento do cancelamento de uma reserva: remoção definitiva do banco de dados ou marcação como cancelada. Optou-se ativamente pela abordagem de **Soft Delete** em detrimento do clássico *Hard Delete* (remoção permanente do registro).
+
+**Justificativas para a escolha do Soft Delete:**
+
+- **Vantagens Técnicas e de Negócio:** 
+  1. **Auditoria e Histórico:** Mantém-se uma auditoria temporal consistente. É possível cruzar dados gerenciais e analíticos, como a taxa de desistência por sala de reunião. O dado histórico é preservado, sendo apenas ocultado da visão do usuário comum.
+  2. **Proteção de Dados:** Adiciona uma camada de proteção contra perda de dados. Uma exclusão acidental ou indevida não apaga a informação permanentemente, apenas atualiza a coluna `cancelado_em` com o timestamp atual.
+  3. **Integridade Referencial (FKs):** O sistema mantém-se estruturado para escalabilidade. Caso módulos futuros (ex.: faturamento ou relatórios de uso) sejam atrelados às reservas, a remoção via *Hard Delete* comprometeria a integridade do banco de dados.
+
+- **Trade-offs Assumidos:**
+  1. Maior atenção na construção de consultas. Todos os retornos da API que listam as reservas ativas precisam filtrar explicitamente as reservas canceladas (`.filter(cancelado_em == None)`).
+  2. Alocação contínua de espaço em disco para armazenar registros inativos. No entanto, em aplicações corporativas, a retenção de histórico e a rastreabilidade possuem um valor de negócio consideravelmente maior que o custo de armazenamento.
+
+---
+
+## Vídeo de Apresentação e Explicações
+
+> **Avaliador:** [**Clique aqui para assistir ao vídeo (Inserir Link)**](INSERIR_LINK_AQUI)
+
+*O vídeo respeita o limite estabelecido de 5 minutos, foi gravado sem cortes e aborda: a estrutura do projeto, a demonstração da aplicação (incluindo a simulação de sobreposição de horários), a explicação da lógica de bloqueio de conflitos, a justificativa arquitetural do cancelamento e a resolução de um desafio não planejado durante a implementação.*
+
+---
+
+## Como Executar o Projeto Localmente
+
+O ambiente de execução foi estruturado para ser de fácil inicialização e testabilidade local, sem a necessidade de configurações complexas como containers Docker.
+
+### 1. Inicialização da API (Backend)
+1. Acesse o diretório `/backend` através do terminal.
+2. Certifique-se de possuir o Python instalado. Recomenda-se a criação de um ambiente virtual para a instalação das dependências:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Inicie o servidor local via FastAPI:
    ```bash
    uvicorn main:app --reload --port 8000
    ```
-   > O Banco de dados (`coworking.db`) será criado sozinho, populado com 3 Salas Padrão automaticamente.
+   > O banco de dados (`coworking.db`) será gerado automaticamente e receberá a carga inicial (seed) de salas na primeira execução.
 
-### 2. Iniciar a Interface (Frontend)
-1. Abra um novo terminal e vá para a pasta `/frontend`.
-2. (Opcional) Instale os pacotes com `npm install`.
-3. Inicie o servidor em modo de desenvolvimento (Vite):
+### 2. Inicialização da Interface (Frontend)
+1. Acesse o diretório `/frontend` através de uma nova janela do terminal.
+2. Certifique-se de possuir o Node.js instalado e instale os pacotes:
+   ```bash
+   npm install
+   ```
+3. Inicie o servidor de desenvolvimento (Vite):
    ```bash
    npm run dev -- --port 5173 --strictPort
    ```
-4. Navegue até http://localhost:5173 para acessar o sistema.
+4. Navegue até o endereço local fornecido no terminal (geralmente `http://localhost:5173`) para visualizar a aplicação.
 
 ---
 
-## 📖 Documentação do Código (Docs)
+## Documentação de Código Complementar
 
-Caso precise se aprofundar em como o sistema funciona ou queira escalar a aplicação, preparamos duas documentações detalhadas que explicam linha a linha o que cada arquivo das nossas pastas faz:
-- Acesse 👉 **[Docs/Backend.md](Docs/Backend.md)**
-- Acesse 👉 **[Docs/Frontend.md](Docs/Frontend.md)**
+Para maiores detalhes sobre a organização e estrutura interna de arquivos:
+- Documentação da API (Backend): **[Docs/Backend.md](Docs/Backend.md)**
+- Documentação de Componentes (Frontend): **[Docs/Frontend.md](Docs/Frontend.md)**
